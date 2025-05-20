@@ -52,7 +52,7 @@
             </div>
             <div>
                 <label class="block font-medium mb-1">Country</label>
-                <flux:input type="text" wire:model.defer="country" class="w-full" />
+                <flux:input type="text" wire:model.defer="country" class="w-full" value="Bangladesh" readonly />
                 @error('country') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
             </div>
             <div>
@@ -75,16 +75,36 @@
                 </flux:select>
                 @error('category') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
             </div>
+            <div>
+                <label class="block font-medium mb-1">National ID</label>
+                <flux:input type="text" wire:model.defer="national_id" class="w-full" />
+                @error('national_id') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+            </div>
+            <div>
+                <label class="block font-medium mb-1">Passport Number</label>
+                <flux:input type="text" wire:model.defer="passport_number" class="w-full" />
+                @error('passport_number') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+            </div>
         </div>
         <div>
-            <label class="block font-medium mb-1">Photo (passport size)</label>
+            <label class="block font-medium mb-1">Photo (passport size, png or jpg)</label>
             <flux:input type="file" wire:model="photo" accept="image/*" class="w-full" />
             @error('photo') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
         </div>
-        <div>
-            <label class="block font-medium mb-1">Documents (images or PDFs, multiple allowed)</label>
-            <flux:input type="file" wire:model="documents" multiple accept="image/*,application/pdf" class="w-full" />
-            @error('documents.*') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+        <div class="flex flex-row gap-2">
+            <div>
+                <label class="block font-medium mb-1">Documents (Multiple Images and PDFs)</label>
+                <flux:input type="file" wire:model="documents" multiple accept="image/*,application/pdf" class="w-full" />
+                @error('documents.*') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+            </div>
+            <div class="mt-2 text-sm bg-amber-100 w-1/2 p-2 ml-2 rounded">                
+                Required Documents:
+                <ul class="list-disc list-inside">
+                    <li>Passport or National ID</li>
+                    <li>Utility Bill</li>
+                    <li>Proof of Address</li>
+                </ul>
+            </div>
         </div>
 
         <hr class="my-4">
@@ -97,7 +117,7 @@
             </div>
             <div class="flex-1">&nbsp;</div>
             <div class="flex-1">
-                <flux:button type="submit" color="primary" class="w-full">Submit Application</flux:button>
+                <flux:button type="submit" color="accent" class="w-full bg-blue-600! text-white!">Submit Application</flux:button>
             </div>
         </div>
     </form>

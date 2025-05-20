@@ -14,10 +14,17 @@ class AccountOpenForm extends Component
 {
     use WithFileUploads;
 
-    public $first_name, $last_name, $birth_date, $phone, $email, $street, $city, $zip, $region_state, $country, $account_type, $category;
+    public $first_name, $last_name, $birth_date, 
+        $phone, $email, 
+        $street, $city, $zip, $region_state, 
+        $account_type, $category,
+        $national_id, $passport_number;
+
+    public $country = 'Bangladesh';
     public $photo;
     public $documents = [];
-    public $_answer;
+    public $_answer; // Simple Captcha
+    
 
     protected function rules()
     {
@@ -34,6 +41,8 @@ class AccountOpenForm extends Component
             'country' => 'required|string|max:255',
             'account_type' => 'required|string|max:255',
             'category' => 'required|string|max:255',
+            'national_id' => 'nullable|string|max:19',
+            'passport_number' => 'required_without:national_id|string|max:25',
             'photo' => 'required|image|max:2048',
             'documents.*' => 'file|mimes:jpg,jpeg,png,pdf|max:4096',
             '_answer' => 'required|simple_captcha',
@@ -57,6 +66,8 @@ class AccountOpenForm extends Component
             'country' => $this->country,
             'account_type' => $this->account_type,
             'category' => $this->category,
+            'national_id' => $this->national_id,
+            'passport_number' => $this->passport_number,
             'state' => 'pending',
             '_answer' => $this->_answer,
         ]);

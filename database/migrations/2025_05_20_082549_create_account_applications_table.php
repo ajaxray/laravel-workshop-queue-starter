@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('account_applications', function (Blueprint $table) {
             $table->id();
+            $table->string('tracking_id', 8)->unique();
             $table->string('first_name');
             $table->string('last_name');
             $table->date('birth_date');
@@ -25,6 +26,8 @@ return new class extends Migration
             $table->string('country');
             $table->string('account_type');
             $table->string('category');
+            $table->string('national_id')->nullable();
+            $table->string('passport_number')->nullable();
             $table->string('state')->default('pending'); // for state machine
             $table->timestamps();
         });

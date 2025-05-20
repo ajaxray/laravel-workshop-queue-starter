@@ -15,6 +15,7 @@ class AccountApplication extends Model implements HasMedia
     use HasFactory, InteractsWithMedia; //, HasStateMachines;
 
     protected $fillable = [
+        'tracking_id',
         'first_name',
         'last_name',
         'birth_date',
@@ -27,8 +28,26 @@ class AccountApplication extends Model implements HasMedia
         'country',
         'account_type',
         'category',
+        'national_id',
+        'passport_number',
         'state',
     ];
 
     // State machine config will go here
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            // Generate tracking id
+            if (empty($model->tracking_id)) {
+                do {
+                    $trackingId = substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 8);
+                } while (self::where('tracking_id', $trackingId)->exists());
+
+                $model->tracking_id = $trackingId;
+            }
+        });
+    }
 }
