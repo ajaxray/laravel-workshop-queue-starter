@@ -1,0 +1,92 @@
+<?php
+
+namespace App\Livewire;
+
+use Livewire\Component;
+use App\Models\AccountApplication;
+use Illuminate\Support\Facades\Mail;
+use Livewire\WithFileUploads;
+use Illuminate\Support\Str;
+use Livewire\Attributes\Layout;
+
+#[Layout('components.layouts.app.guest')]
+class AccountOpenForm extends Component
+{
+    use WithFileUploads;
+
+    public $first_name, $last_name, $birth_date, $phone, $email, $street, $city, $zip, $region_state, $country, $account_type, $category;
+    public $photo;
+    public $documents = [];
+    public $_answer;
+
+    protected function rules()
+    {
+        return [
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'birth_date' => 'required|date',
+            'phone' => 'required|string|max:30',
+            'email' => 'required|email|max:255',
+            'street' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'zip' => 'required|string|max:20',
+            'region_state' => 'required|string|max:255',
+            'country' => 'required|string|max:255',
+            'account_type' => 'required|string|max:255',
+            'category' => 'required|string|max:255',
+            'photo' => 'required|image|max:2048',
+            'documents.*' => 'file|mimes:jpg,jpeg,png,pdf|max:4096',
+            '_answer' => 'required|simple_captcha',
+        ];
+    }
+
+    public function submit()
+    {
+        $this->validate();
+
+        $application = AccountApplication::create([
+            'first_name' => $this->first_name,
+            'last_name' => $this->last_name,
+            'birth_date' => $this->birth_date,
+            'phone' => $this->phone,
+            'email' => $this->email,
+            'street' => $this->street,
+            'city' => $this->city,
+            'zip' => $this->zip,
+            'region_state' => $this->region_state,
+            'country' => $this->country,
+            'account_type' => $this->account_type,
+            'category' => $this->category,
+            'state' => 'pending',
+            '_answer' => $this->_answer,
+        ]);
+
+        // Handle photo upload (single)
+        if ($this->photo) {
+            $application->addMedia($this->photo->getRealPath())
+                ->usingName('Photo')
+                ->toMediaCollection('photo', 'private');
+        }
+
+        // Handle documents upload (multiple)
+        if ($this->documents) {
+            foreach ($this->documents as $doc) {
+                $application->addMedia($doc->getRealPath())
+                    ->usingName($doc->getClientOriginalName())
+                    ->toMediaCollection('documents', 'private');
+            }
+        }
+
+        // Send email with tracking number
+        $trackingNumber = 'APP-' . str_pad($application->id, 6, '0', STR_PAD_LEFT);
+        Mail::to($this->email)->send(new \App\Mail\AccountApplicationSubmitted($application, $trackingNumber));
+
+        session()->flash('success', 'Your application has been submitted! Your tracking number is ' . $trackingNumber . '.');
+        $this->reset();
+    }
+
+    public function render()
+    {
+        return view('livewire.account-open-form');
+    }
+}

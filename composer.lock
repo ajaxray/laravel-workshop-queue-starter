@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "297c1acc7205332975d6630d3d1fb4a8",
+    "content-hash": "14c7c698beb4bbfd43688f0ccdd716f2",
     "packages": [
         {
             "name": "brick/math",
@@ -1134,6 +1134,61 @@
                 }
             ],
             "time": "2025-02-03T10:55:03+00:00"
+        },
+        {
+            "name": "haruncpi/laravel-simple-captcha",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/haruncpi/laravel-simple-captcha.git",
+                "reference": "cef6c97e8c71752f49a060001393b91db467d1fa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/haruncpi/laravel-simple-captcha/zipball/cef6c97e8c71752f49a060001393b91db467d1fa",
+                "reference": "cef6c97e8c71752f49a060001393b91db467d1fa",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Haruncpi\\LaravelSimpleCaptcha\\ServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/helpers.php"
+                ],
+                "psr-4": {
+                    "Haruncpi\\LaravelSimpleCaptcha\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "cc-by-4.0"
+            ],
+            "authors": [
+                {
+                    "name": "MD.HARUN-UR-RASHID",
+                    "email": "harun.cox@gmail.com"
+                }
+            ],
+            "description": "A laravel simple captcha package",
+            "keywords": [
+                "Simple",
+                "captcha",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/haruncpi/laravel-simple-captcha/issues",
+                "source": "https://github.com/haruncpi/laravel-simple-captcha/tree/v1.0.0"
+            },
+            "time": "2020-02-17T08:06:38+00:00"
         },
         {
             "name": "laravel/framework",
