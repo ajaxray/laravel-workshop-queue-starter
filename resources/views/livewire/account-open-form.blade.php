@@ -1,6 +1,6 @@
 <div class="max-w-2xl w-full mx-auto py-10">
-    <form wire:submit.prevent="submit" class="space-y-6 bg-white p-8 rounded shadow">
-        <h2 class="text-2xl font-bold mb-4">Open a New Bank Account</h2>
+    <form wire:submit.prevent="submit" class="space-y-6 bg-white p-8 rounded shadow-md">
+        <h2 class="text-2xl font-bold mb-8">Open a New Bank Account</h2>
         @if (session()->has('success'))
             <div class="mb-4 p-4 bg-green-100 text-green-800 rounded">{{ session('success') }}</div>
         @endif
