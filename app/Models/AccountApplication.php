@@ -2,17 +2,21 @@
 
 namespace App\Models;
 
+use App\Stats\AccountState;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\ModelStates\HasStates;
+use Spatie\ModelStates\HasStatesContract;
+
 // For state machine
 // use Asantibanez\LaravelEloquentStateMachines\Traits\HasStateMachines;
 
-class AccountApplication extends Model implements HasMedia
+class AccountApplication extends Model implements HasMedia, HasStatesContract
 {
     /** @use HasFactory<\Database\Factories\AccountApplicationFactory> */
-    use HasFactory, InteractsWithMedia; //, HasStateMachines;
+    use HasFactory, InteractsWithMedia, HasStates; 
 
     protected $fillable = [
         'tracking_id',
@@ -31,6 +35,11 @@ class AccountApplication extends Model implements HasMedia
         'national_id',
         'passport_number',
         'state',
+    ];
+
+    protected $casts = [
+        'state' => AccountState::class,
+        'birth_date' => 'date',
     ];
 
     // State machine config will go here

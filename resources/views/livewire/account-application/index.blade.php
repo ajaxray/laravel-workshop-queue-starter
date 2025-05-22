@@ -10,7 +10,14 @@
             <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
                 <div class="w-full">
                     <div class="sm:flex sm:items-center">
-                        <div class="sm:flex-auto">Here</div>
+                        <div>
+                            <flux:select wire:model.live="stateFilter" placeholder="Filter by State">
+                                @foreach ($stateOptions as $value => $label)
+                                    <flux:select.option value="{{ $value }}">{{ $label }}</flux:select.option>
+                                @endforeach
+                            </flux:select>
+                        </div>
+                        <div class="flex-1"></div>
                         <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
                             <flux:button variant="primary"  :href="route('account-applications.create')">{{ __('Add New') }}</flux:butt>
                         </div>
@@ -63,13 +70,7 @@
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $accountApplication->national_id }}</td>
 										{{-- <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $accountApplication->passport_number }}</td> --}}
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                            <flux:badge color="@php(match($accountApplication->state) {
-                                                'approved' => 'green',
-                                                'rejected' => 'red',
-                                                'processing' => 'blue',
-                                                'completed' => 'lime',
-                                                default => 'gray',
-                                            })">{{ $accountApplication->state }}</flux:badge>
+                                            <flux:badge color="{{ $accountApplication->state->color() }}">{{ $accountApplication->state->label() }}</flux:badge>
 
                                         </td>
 

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Stats\Submitted;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -29,7 +30,39 @@ class AccountApplicationFactory extends Factory
             'country' => $this->faker->country(),
             'account_type' => $this->faker->randomElement(['Preferred Banking', 'Standard', 'Business']),
             'category' => $this->faker->randomElement(['Individual', 'Joint', 'Corporate']),
-            'state' => 'pending',
+            'national_id' => $this->faker->unique()->numerify('##########'),
+            'passport_number' => $this->faker->unique()->numerify('PP########'),
+            'state' => Submitted::class,
         ];
+    }
+
+    public function configure()
+    {
+        return $this->afterCreating(function ($application) {
+            // Attach a random photo from data/avatars
+            $avatars = glob(base_path('data/avatars/*.jpg'));
+            if ($avatars && count($avatars) > 0) {
+                $photo = $avatars[array_rand($avatars)];
+                $application->addMedia($photo)
+                    ->preservingOriginal()
+                    ->usingName('Photo')
+                    ->toMediaCollection('photo', 'private');
+            }
+
+            // Attach 3 random documents from data/documents
+            $documents = array_merge(
+                glob(base_path('data/documents/*.pdf')),
+                glob(base_path('data/documents/*.png')),
+                glob(base_path('data/documents/*.jpg'))
+            );
+            if ($documents && count($documents) >= 3) {
+                $selected = array_rand($documents, 3);
+                foreach ((array)$selected as $docIndex) {
+                    $application->addMedia($documents[$docIndex])
+                        ->preservingOriginal()
+                        ->toMediaCollection('documents', 'private');
+                }
+            }
+        });
     }
 }
