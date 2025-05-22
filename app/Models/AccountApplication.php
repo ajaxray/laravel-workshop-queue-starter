@@ -50,4 +50,11 @@ class AccountApplication extends Model implements HasMedia
             }
         });
     }
+
+    public function registerMediaConversions(?\Spatie\MediaLibrary\MediaCollections\Models\Media $media = null): void
+    {
+        $this->addMediaConversion('thumb')
+            ->fit(\Spatie\Image\Enums\Fit::Crop, 200, 200)
+            ->quality(80);
+    }
 }

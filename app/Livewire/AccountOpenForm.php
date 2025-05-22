@@ -74,18 +74,17 @@ class AccountOpenForm extends Component
 
         // Handle photo upload (single)
         if ($this->photo) {
-            $application->addMedia($this->photo->getRealPath())
+            $application->addMediaFromRequest('photo')
                 ->usingName('Photo')
                 ->toMediaCollection('photo', 'private');
         }
 
         // Handle documents upload (multiple)
         if ($this->documents) {
-            foreach ($this->documents as $doc) {
-                $application->addMedia($doc->getRealPath())
-                    ->usingName($doc->getClientOriginalName())
-                    ->toMediaCollection('documents', 'private');
-            }
+            $application->addMultipleMediaFromRequest(['documents'])
+                ->each(function ($fileAdder) {
+                    $fileAdder->toMediaCollection('documents', 'private');
+                });
         }
 
         // Send email with tracking number
