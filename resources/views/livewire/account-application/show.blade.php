@@ -15,7 +15,7 @@
                         </div>
                         <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
                             <flux:button icon="arrow-left" variant="filled" :href="route('account-applications.index')">{{ __('Back') }}</flux:butt> &nbsp;
-                            @if ($accountApplication->state->is(Submitted::class))
+                            @if ($accountApplication->state->is('App\Stats\Submitted'))
                                 <flux:button icon="play" variant="primary" wire:click="startProcess({{ $accountApplication->id }})">
                                     {{ __('Start Process') }}
                                 </flux:button>

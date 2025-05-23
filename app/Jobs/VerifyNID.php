@@ -6,7 +6,7 @@ use App\Models\AccountApplication;
 use App\Services\NIDVerificationService;
 use App\Stats\NIDVerified;
 use App\Stats\Rejected;
-use Illuminate\Contracts\Broadcasting\ShouldBeUnique;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\Attributes\WithoutRelations;

@@ -55,6 +55,6 @@ abstract class AccountState extends State
 
     public function is(string $stateClass): bool
     {
-        return class_basename(static::class) === $stateClass;
+        return static::class === $stateClass;
     }
 } 
