@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    'nsfw' => [
+        'host' => env('NSFW_API_HOST'),
+        'key' => env('NSFW_API_KEY'),
+        'endpoint' => env('NSFW_API_ENDPOINT'),
+    ],
+
 ];
