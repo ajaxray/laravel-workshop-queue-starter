@@ -20,10 +20,10 @@ class AccountApplicationSubmitted extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(AccountApplication $application, $trackingNumber)
+    public function __construct(AccountApplication $application)
     {
         $this->application = $application;
-        $this->trackingNumber = $trackingNumber;
+        $this->trackingNumber = $application->tracking_id;
     }
 
     /**

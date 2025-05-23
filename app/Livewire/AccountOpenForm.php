@@ -2,8 +2,10 @@
 
 namespace App\Livewire;
 
+use App\Jobs\VerifyNID;
 use Livewire\Component;
 use App\Models\AccountApplication;
+use App\Stats\Submitted;
 use Illuminate\Support\Facades\Mail;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Str;
@@ -53,7 +55,25 @@ class AccountOpenForm extends Component
     {
         $this->validate();
 
-        $application = AccountApplication::create([
+        $application = $this->createAccountApplication();
+        $this->handleUploads($application);
+
+        // VerifyNID::dispatch($application);
+
+        Mail::to($this->email)->send(new \App\Mail\AccountApplicationSubmitted($application));
+
+        session()->flash('success', 'Your application has been submitted! Your tracking number is ' . $trackingNumber . '.');
+        $this->reset();
+    }
+
+    public function render()
+    {
+        return view('livewire.account-open-form');
+    }
+
+    private function createAccountApplication(): AccountApplication
+    {
+        return AccountApplication::create([
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
             'birth_date' => $this->birth_date,
@@ -68,10 +88,12 @@ class AccountOpenForm extends Component
             'category' => $this->category,
             'national_id' => $this->national_id,
             'passport_number' => $this->passport_number,
-            'state' => 'pending',
-            '_answer' => $this->_answer,
+            'state' => Submitted::class,
         ]);
+    }
 
+    private function handleUploads(AccountApplication $application): void
+    {
         // Handle photo upload (single)
         if ($this->photo) {
             $application->addMediaFromRequest('photo')
@@ -86,17 +108,5 @@ class AccountOpenForm extends Component
                     $fileAdder->toMediaCollection('documents', 'private');
                 });
         }
-
-        // Send email with tracking number
-        $trackingNumber = 'APP-' . str_pad($application->id, 6, '0', STR_PAD_LEFT);
-        Mail::to($this->email)->send(new \App\Mail\AccountApplicationSubmitted($application, $trackingNumber));
-
-        session()->flash('success', 'Your application has been submitted! Your tracking number is ' . $trackingNumber . '.');
-        $this->reset();
-    }
-
-    public function render()
-    {
-        return view('livewire.account-open-form');
     }
 }
