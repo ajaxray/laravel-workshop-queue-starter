@@ -7,7 +7,7 @@ use Livewire\Form;
 
 class AccountApplicationForm extends Form
 {
-    public ?AccountApplication $accountApplicationModel;
+    protected ?AccountApplication $accountApplicationModel;
     
     public $tracking_id = '';
     public $first_name = '';
@@ -67,7 +67,12 @@ class AccountApplicationForm extends Form
         $this->category = $this->accountApplicationModel->category;
         $this->national_id = $this->accountApplicationModel->national_id;
         $this->passport_number = $this->accountApplicationModel->passport_number;
-        $this->state = $this->accountApplicationModel->state;
+        // $this->state = $this->accountApplicationModel->state;
+    }
+
+    public function getAccountApplicationModel(): AccountApplication
+    {
+        return $this->accountApplicationModel;
     }
 
     public function store(): void

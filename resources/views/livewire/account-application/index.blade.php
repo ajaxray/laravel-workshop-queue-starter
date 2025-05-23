@@ -29,8 +29,6 @@
                                 <table class="w-full divide-y divide-gray-300">
                                     <thead>
                                     <tr>
-                                        <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">No</th>
-                                        
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Tracking Id</th>
 									<th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Name</th>
 									{{-- <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">DOB</th> --}}
@@ -53,9 +51,7 @@
                                     <tbody class="divide-y divide-gray-200 bg-white">
                                     @foreach ($accountApplications as $accountApplication)
                                         <tr class="even:bg-gray-50" wire:key="{{ $accountApplication->id }}">
-                                            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">{{ ++$i }}</td>
-                                            
-										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">#{{ $accountApplication->tracking_id }}</td>
+										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 font-semibold">{{ $accountApplication->tracking_id }}</td>
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $accountApplication->first_name }} {{ $accountApplication->last_name }}</td>
 										{{-- <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $accountApplication->birth_date }}</td> --}}
 										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $accountApplication->phone }}</td>
@@ -74,11 +70,11 @@
 
                                         </td>
 
-                                            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900">
+                                            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900">                                                
                                                 <a wire:navigate href="{{ route('account-applications.show', $accountApplication->id) }}" class="text-gray-600 font-bold hover:text-gray-900 mr-2">{{ __('Show') }}</a>
                                                 {{-- <a wire:navigate href="{{ route('account-applications.edit', $accountApplication->id) }}" class="text-indigo-600 font-bold hover:text-indigo-900  mr-2">{{ __('Edit') }}</a> --}}
                                                 <button
-                                                    class="text-red-600 font-bold hover:text-red-900"
+                                                    class="text-red-600 font-bold cursor-pointer hover:text-red-900"
                                                     type="button"
                                                     wire:click="delete({{ $accountApplication->id }})"
                                                     wire:confirm="Are you sure you want to delete?"

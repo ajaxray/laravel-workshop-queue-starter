@@ -1,7 +1,7 @@
 <section class="w-full">
     <div class="relative mb-6 w-full">
-        <flux:heading size="xl" level="1">{{ __('Show') }}</flux:heading>
-        <flux:subheading size="lg" class="mb-6">{{ __('Account Application') }}</flux:subheading>
+        <flux:heading size="xl" level="1">{{ __('Account Application of') }} <span class="font-bold">{{ $accountApplication->first_name }} {{ $accountApplication->last_name }}</span></flux:heading>
+        <flux:subheading size="lg" class="mb-6">Tracking ID: #{{ $accountApplication->tracking_id }}</flux:subheading>
         <flux:separator variant="subtle" />
     </div>
 
@@ -10,11 +10,16 @@
             <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
                 <div class="w-full">
                     <div class="sm:flex sm:items-center">
-                        <div class="sm:flex-auto">
-                            <p class="mt-2 text-xl text-gray-700">Details of {{ __('Account Application') }} #{{ $accountApplication->tracking_id }}</p>
+                        <div class="sm:flex-auto text-lg text-gray-700">
+                            Status: <flux:badge size="lg" class="inline-block!" color="{{ $accountApplication->state->color() }}">{{ $accountApplication->state->label() }}</flux:badge>
                         </div>
                         <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                            <flux:button variant="primary"  :href="route('account-applications.index')">{{ __('Back') }}</flux:butt>
+                            <flux:button icon="arrow-left" variant="filled" :href="route('account-applications.index')">{{ __('Back') }}</flux:butt> &nbsp;
+                            @if ($accountApplication->state->is(Submitted::class))
+                                <flux:button icon="play" variant="primary" wire:click="startProcess({{ $accountApplication->id }})">
+                                    {{ __('Start Process') }}
+                                </flux:button>
+                            @endif
                         </div>
                     </div>
 
@@ -106,7 +111,7 @@
                                                 </div>
                                                 <div class="py-2">
                                                     <dt class="text-sm font-medium leading-6 text-gray-900">State</dt>
-                                                    <dd class="mt-1 text-sm leading-6 text-gray-700">{{ $accountApplication->state }}</dd>
+                                                    <dd class="mt-1 text-sm leading-6 text-gray-700">{{ $accountApplication->state->label() }}</dd>
                                                 </div>
                                                 <div class="py-2">
                                                     <dt class="text-sm font-medium leading-6 text-gray-900">Tracking ID</dt>
@@ -153,6 +158,33 @@
                                 @endforeach
                             </div>
                         </section>
+
+                        <!-- Remarks Section -->
+                        @if ($accountApplication->remarks)
+                        <section class="bg-white rounded-lg shadow p-6 mb-8">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Remarks</h3>
+                            <div class="text-sm leading-6 text-gray-700">
+                                @foreach ($accountApplication->remarks as $remark)
+                                    @php
+                                        if (preg_match('/^([\d\- :]+) : (.*)$/', $remark, $matches)) {
+                                            $date = $matches[1];
+                                            $message = $matches[2];
+                                        } else {
+                                            $date = null;
+                                            $message = $remark;
+                                        }
+                                    @endphp
+                                    <div class="text-sm leading-6 text-gray-700 border-b border-gray-200 pb-2">
+                                        @if ($date)
+                                            <span class="font-bold">{{ $date }}</span> : {{ $message }}
+                                        @else
+                                            {{ $message }}
+                                        @endif
+                                    </div>
+                                @endforeach
+                                </div>
+                            </section>
+                        @endif
                     </div>
                     
                 </div>

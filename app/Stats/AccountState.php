@@ -2,6 +2,8 @@
 
 namespace App\Stats;
 
+use Barryvdh\Debugbar\Facades\Debugbar;
+use Barryvdh\Debugbar\Twig\Extension\Debug;
 use Spatie\ModelStates\State;
 use Spatie\ModelStates\StateConfig;
 
@@ -49,5 +51,10 @@ abstract class AccountState extends State
             Rejected::class => 'red',
             default => 'gray',
         };
+    }
+
+    public function is(string $stateClass): bool
+    {
+        return class_basename(static::class) === $stateClass;
     }
 } 

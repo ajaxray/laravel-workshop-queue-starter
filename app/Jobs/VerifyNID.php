@@ -6,11 +6,12 @@ use App\Models\AccountApplication;
 use App\Services\NIDVerificationService;
 use App\Stats\NIDVerified;
 use App\Stats\Rejected;
+use Illuminate\Contracts\Broadcasting\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\Attributes\WithoutRelations;
 
-class VerifyNID implements ShouldQueue
+class VerifyNID implements ShouldQueue, ShouldBeUnique
 {
     use Queueable;
 
@@ -46,5 +47,10 @@ class VerifyNID implements ShouldQueue
             $this->application->addRemark('NID verification error: ' . $e->getMessage());
             $this->release(30);
         }
+    }
+
+    public function uniqueId(): string
+    {
+        return $this->application->id;
     }
 }
