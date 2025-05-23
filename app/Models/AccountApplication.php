@@ -35,11 +35,13 @@ class AccountApplication extends Model implements HasMedia, HasStatesContract
         'national_id',
         'passport_number',
         'state',
+        'remarks',
     ];
 
     protected $casts = [
         'state' => AccountState::class,
         'birth_date' => 'date',
+        'remarks' => 'array',
     ];
 
     // State machine config will go here
@@ -65,5 +67,25 @@ class AccountApplication extends Model implements HasMedia, HasStatesContract
         $this->addMediaConversion('thumb')
             ->fit(\Spatie\Image\Enums\Fit::Crop, 200, 200)
             ->quality(80);
+    }
+
+    /**
+     * Append a string remark to the remarks array.
+     */
+    public function addRemark(string $remark): void
+    {
+        $remarks = $this->remarks ?? [];
+        $remarks[] = date('Y-m-d H:i:s') . ' : ' . $remark;
+        $this->remarks = $remarks;
+        $this->save();
+    }
+
+    /**
+     * Get the latest remark from the remarks array.
+     */
+    public function latestRemark(): ?string
+    {
+        $remarks = $this->remarks ?? [];
+        return !empty($remarks) ? end($remarks) : null;
     }
 }
