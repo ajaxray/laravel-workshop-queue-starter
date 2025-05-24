@@ -10,8 +10,30 @@
             <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
                 <div class="w-full">
                     <div class="sm:flex sm:items-center">
-                        <div class="sm:flex-auto text-lg text-gray-700">
+                        <div class="sm:flex-auto text-lg text-gray-700 flex items-center gap-4">
                             Status: <flux:badge size="lg" class="inline-block!" color="{{ $accountApplication->state->color() }}">{{ $accountApplication->state->label() }}</flux:badge>
+
+                            @if (!empty($nextStates))
+                                <div class="flex items-center gap-2">
+                                    <flux:select wire:model.defer="selectedState" class="w-64" placeholder="Change State">
+                                        <option value="">Select next state</option>
+                                        @foreach ($nextStates as $stateClass)
+                                            <option value="{{ $stateClass }}">{{ (new $stateClass($accountApplication))->label() }}</option>
+                                        @endforeach
+                                    </flux:select>
+                                    <flux:modal.trigger name="change-state">
+                                        <flux:button>{{ __('Change') }}</flux:button>
+                                    </flux:modal.trigger>
+                                </div>
+                            @endif
+                            <flux:modal name="change-state" wire:model="showConfirmModal">
+                                <h3 class="text-lg font-semibold text-gray-800 mb-4">Confirm State Change</h3>
+                                <div class="leading-6 text-gray-700 mb-3">Are you sure you want to change the state to <span class="font-bold">@if($selectedState){{ (new $selectedState($accountApplication))->label() }}@endif</span>?</div>
+                                <div class="flex justify-end">
+                                    <flux:button size="sm" variant="filled" wire:click="$set('showConfirmModal', false)">Cancel</flux:button>&nbsp;
+                                    <flux:button size="sm" variant="primary" wire:click="performTransition">Confirm</flux:button>
+                                </div>
+                            </flux:modal>
                         </div>
                         <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
                             <flux:button icon="arrow-left" variant="filled" :href="route('account-applications.index')">{{ __('Back') }}</flux:butt> &nbsp;
