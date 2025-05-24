@@ -45,7 +45,7 @@ class VerifyNID implements ShouldQueue, ShouldBeUnique
             }
         } catch (\Exception $e) {
             $this->application->addRemark('NID verification error: ' . $e->getMessage());
-            $this->release(30);
+            $this->release(5);
         }
     }
 

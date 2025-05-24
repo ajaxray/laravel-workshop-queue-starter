@@ -17,7 +17,8 @@
         "livewire/volt": "^1.7.0",
         "masmerise/livewire-toaster": "^2.8",
         "spatie/laravel-medialibrary": "^11.12",
-        "spatie/laravel-model-states": "^2.11"
+        "spatie/laravel-model-states": "^2.11",
+        "spatie/pdf-to-image": "^3.1"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.15",
