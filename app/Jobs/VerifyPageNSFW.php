@@ -6,6 +6,7 @@ use App\Services\NSFWVerificationService;
 use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Queue\Middleware\RateLimited;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Spatie\PdfToImage\Pdf;
@@ -62,5 +63,12 @@ class VerifyPageNSFW implements ShouldQueue
                 $this->batch()->cancel();                
             }
         }
+    }
+
+    public function middleware(): array
+    {
+        return [
+            (new RateLimited('nsfw'))->releaseAfter(10)
+        ];
     }
 }
