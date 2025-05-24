@@ -7,6 +7,7 @@ use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\Middleware\RateLimited;
+use Illuminate\Queue\Middleware\ThrottlesExceptions;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Spatie\PdfToImage\Pdf;
@@ -68,7 +69,8 @@ class VerifyPageNSFW implements ShouldQueue
     public function middleware(): array
     {
         return [
-            (new RateLimited('nsfw'))->releaseAfter(10)
+            (new RateLimited('nsfw'))->releaseAfter(10),
+            new ThrottlesExceptions(10, 60),
         ];
     }
 }

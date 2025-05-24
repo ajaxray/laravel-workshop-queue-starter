@@ -62,7 +62,7 @@ class AccountOpenForm extends Component
 
         Mail::to($this->email)->send(new \App\Mail\AccountApplicationSubmitted($application));
 
-        session()->flash('success', 'Your application has been submitted! Your tracking number is ' . $trackingNumber . '.');
+        session()->flash('success', 'Your application has been submitted! Your tracking number is ' . $application->tracking_id . '.');
         $this->reset();
     }
 
@@ -96,17 +96,21 @@ class AccountOpenForm extends Component
     {
         // Handle photo upload (single)
         if ($this->photo) {
-            $application->addMediaFromRequest('photo')
+            $application->addMedia($this->photo)
                 ->usingName('Photo')
                 ->toMediaCollection('photo', 'private');
+            $this->photo = null;
         }
 
         // Handle documents upload (multiple)
         if ($this->documents) {
-            $application->addMultipleMediaFromRequest(['documents'])
-                ->each(function ($fileAdder) {
-                    $fileAdder->toMediaCollection('documents', 'private');
-                });
+            foreach ($this->documents as $document) {
+                $application->addMedia($document)   
+                    ->usingName($document->getClientOriginalName())
+                    ->toMediaCollection('documents', 'private');
+            }
+            $this->documents = [];
+            $this->reset('documents');
         }
     }
 }
