@@ -27,6 +27,7 @@ class TrackApplicationTransitions
     {        
         if ($event->model instanceof AccountApplication) {
             Log::info('Account Application transitioned: ' . $event->model->id . ' to ' . $event->finalState::class);
+            
             if ($event->finalState::class == NIDVerified::class) {
                 VerifyNSFW::dispatch($event->model->id);
             } else if ($event->finalState::class == Approved::class) {

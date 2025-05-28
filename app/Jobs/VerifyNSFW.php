@@ -35,11 +35,11 @@ class VerifyNSFW implements ShouldQueue
         $application = AccountApplication::find($this->applicationId);
         $application->addRemark('NSFW verification started');
 
-        $filePaths = [];
+        $pages = [];
         
         $documents = $application->getMedia('documents');
         foreach ($documents as $document) {
-            $filePaths[] = new VerifyPageNSFW(
+            $pages[] = new VerifyPageNSFW(
                 $document->getPath(),
                 $document->name
             );
@@ -47,13 +47,13 @@ class VerifyNSFW implements ShouldQueue
 
         $photo = $application->getFirstMedia('photo');
         if ($photo) {
-            $filePaths[] = new VerifyPageNSFW(
+            $pages[] = new VerifyPageNSFW(
                 $photo->getPath(),
                 $photo->name
             );
         }
 
-        Bus::batch($filePaths)
+        Bus::batch($pages)
             ->name('Verify NSFW for ' . $application->tracking_id)
             ->onQueue('nsfw')
             ->finally(function (Batch $batch) use ($application) {

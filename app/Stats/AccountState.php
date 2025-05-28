@@ -26,6 +26,7 @@ abstract class AccountState extends State
                 Rejected::class,
             ])
             ->allowTransition(Submitted::class, NIDVerified::class)
+            ->allowTransition(Submitted::class, Rejected::class)
             ->allowTransition(NIDVerified::class, PhotoChecked::class)
             ->allowTransition(NIDVerified::class, NSFWChecked::class)
             ->allowTransition(NIDVerified::class, Rejected::class)
