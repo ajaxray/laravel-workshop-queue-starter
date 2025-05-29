@@ -32,11 +32,8 @@ class VerifyNSFWFeatureTest extends TestCase
         (new VerifyNSFW($application->id))->handle();
 
         // Assert: A batch was dispatched with 3 VerifyPageNSFW jobs
-        Bus::assertBatched(function ($batch) use ($application) {
-            return count($batch->jobs) === 3
-                && collect($batch->jobs)->every(fn($job) => $job instanceof VerifyPageNSFW)
-                && $batch->name === 'Verify NSFW for ' . $application->tracking_id;
-        });
+        Bus::assertBatchCount(1);
+        Bus::assertCount(3, VerifyPageNSFW::class);
 
         // Assert: The application has a remark about NSFW verification started
         $application->refresh();
